@@ -22,7 +22,16 @@
         "status": true,
         "apikey": "4canmP22tqb4anwo2bmR32w3gytt5bKv4bpEA2SRcbnFps8y08HqTZaTBptfyUme",
         "apisec": "UxSbPIbH6Zki9jklzMQcu59ObbiTqAM1QyP1gsSOv3YLdfoGsHh7yMae8qxlI3Zs"
+    },
+    {
+        "name": "bao3",
+        "role": "slave",
+        "id": "bao3",
+        "status": true,
+        "apikey": "gW9gLxUyLN4cobhJmx2hUDixNKKWWB7REuNS7kNvcyt39L1dPmqdVFlHd9C2wezs",
+        "apisec": "59Qyoe0dYS5gwcLcxlYX5fJXVjzPBJFYBk6FcyP7VXb5UzjE45T05qjOdu5CtQXh"
     }
+    
     
     
 ]
