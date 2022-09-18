@@ -11,8 +11,12 @@ var ListAccount = require('./account.json')
 const pnlDB = require('cakebase')('./pnlDB.json')
 const pro = require('process')
 var listProcess = []
-const websocketPORT = 3001
-const tpcPORT = 8888
+const PubNub = require('pubnub')
+const pubnub = new PubNub({
+    subscribeKey: 'sub-c-f85a3f2f-9028-40fc-8f09-89cb149a1355',
+    publishKey: 'pub-c-3d5ddae6-a6db-4be3-8cbb-266b9167b35b',
+    userId: '3d5ddae6f8a6db5a3f2f',
+});
 function exitHandler() {
     console.log("===Exit process===")
     listProcess.forEach(childProcess => {
@@ -24,23 +28,13 @@ function exitHandler() {
 pro.on('SIGINT', exitHandler.bind());
 //websocket
 var listClientWS = [];
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({
-    port: websocketPORT
-});
-wss.on('connection', (ws) => {
-    console.log('client connnect!')
-    // listClientWS.push(ws);
-    listClientWS.push(ws)
 
-})
-const sendAllWS = (msg) => {
-    if (listClientWS.length > 0) {
-        for (let i = 0; i < listClientWS.length; i++) {
-            listClientWS[i].send(JSON.stringify(msg))
-        }
-
-    }
+const sendAllWS = async (msg) => {
+    console.log(msg)
+    await pubnub.publish({
+        channel: "mychannel",
+        message: JSON.stringify(msg)
+    });
 }
 //MQ orderServer, ở đây làm channel main nhận msg từ các channel nhỏ và pub qua ws
 //zeroMQ port 3333
@@ -51,9 +45,8 @@ sock.connect('tcp://127.0.0.1:8080');
 sock.subscribe('msg');
 console.log('Subscriber connected to port 8888');
 
-sock.on('message', (topic, message) => {
+sock.on('message', async (topic, message) => {
     let msg = message.toString("utf8")
-    console.log(msg)
     sendAllWS(msg)
 });
 
@@ -223,6 +216,7 @@ app.post('/orderthanhly', async (req, res) => {
         }
     })
 })
+
 app.listen(PORT, err => {
     if (err) throw err;
     console.log("Server copytrade running at " + PORT);
