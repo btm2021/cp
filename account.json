@@ -1,0 +1,28 @@
+[
+    {
+        "name": "kien1",
+        "id": "kien1",
+        "role": "master",
+        "status": false,
+        "apikey": "a2b963jVIsIUBo3TvtNkVUYmbG3h858DHmn25lLxVmVnTHSDRrBHru8zILc9b52E",
+        "apisec": "WPMwQJ2ULF9FoRIs30yF08oUgXXSUQh8q39nAxk6JITeRAd4HT70IEoFh0MO8cSz"
+    },
+    {
+        "name": "kien2",
+        "role": "slave",
+        "id": "kien2",
+        "status": false,
+        "apikey": "fGECAol3gse0gjrxMbFhpbm3eAnp2iydXBb8tpXwrE7a3nmNAiy5RZGfOMwq0jX3",
+        "apisec": "mhnzbyqFCeDZgGm28NgeBu5jTri8uqKmrvCgNIeRDhrqS7s1f6sJuw6iW8qItDVt"
+    },
+    {
+        "name": "bao1",
+        "role": "master",
+        "id": "bao1",
+        "status": true,
+        "apikey": "4canmP22tqb4anwo2bmR32w3gytt5bKv4bpEA2SRcbnFps8y08HqTZaTBptfyUme",
+        "apisec": "UxSbPIbH6Zki9jklzMQcu59ObbiTqAM1QyP1gsSOv3YLdfoGsHh7yMae8qxlI3Zs"
+    }
+    
+    
+]

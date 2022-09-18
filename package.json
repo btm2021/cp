@@ -1,0 +1,25 @@
+{
+  "name": "copytrade",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "binance": "^2.0.37",
+    "cakebase": "^4.0.2",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "delay": "^5.0.0",
+    "express": "^4.18.1",
+    "morgan": "^1.10.0",
+    "node-binance-api": "^0.13.1",
+    "nodemon": "^2.0.19",
+    "ws": "^8.8.1",
+    "zeromq": "^5.2.8"
+  }
+}
