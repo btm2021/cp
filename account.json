@@ -11,7 +11,7 @@
         "name": "kien2",
         "role": "slave",
         "id": "kien2",
-        "status": false,
+        "status": true,
         "apikey": "fGECAol3gse0gjrxMbFhpbm3eAnp2iydXBb8tpXwrE7a3nmNAiy5RZGfOMwq0jX3",
         "apisec": "mhnzbyqFCeDZgGm28NgeBu5jTri8uqKmrvCgNIeRDhrqS7s1f6sJuw6iW8qItDVt"
     },
