@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const PORT = process.env.PORT || 3000;
 const fs = require('fs')
 const cp = require('child_process');
-var ListAccount = require('./account.json')
+var ListAccount = require('./configfolder/account.json')
 const pnlDB = require('cakebase')('./pnlDB.json')
 const pro = require('process')
 var listProcess = []
@@ -26,6 +26,13 @@ function exitHandler() {
 }
 
 pro.on('SIGINT', exitHandler.bind());
+pro.on('ESRCH', exitHandler.bind());
+pro.on('exit', exitHandler.bind());
+pro.on('SIGUSR1', exitHandler.bind());
+pro.on('SIGUSR2', exitHandler.bind());
+pro.on('uncaughtException', exitHandler.bind());
+
+
 //websocket
 var listClientWS = [];
 
@@ -96,7 +103,7 @@ app.post('/acc', (req, res) => {
     switch (action) {
         case "add": {
             ListAccount.push(infoAccount);
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (data, err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (data, err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {
@@ -106,7 +113,7 @@ app.post('/acc', (req, res) => {
         } break;
         case "delete": {
             ListAccount = ListAccount.filter(acc => acc.id != idAccount)
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (data, err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (data, err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {
@@ -117,7 +124,7 @@ app.post('/acc', (req, res) => {
         case "edit": {
             let itemIndex = ListAccount.findIndex(acc => acc.id === idAccount)
             ListAccount[itemIndex] = infoAccount
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (data, err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (data, err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {
@@ -137,7 +144,7 @@ app.post('/acc', (req, res) => {
         case "turnoff": {
             let itemIndex = ListAccount.findIndex(acc => acc.id === idAccount)
             ListAccount[itemIndex].status = false;
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (data, err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (data, err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {
@@ -148,7 +155,7 @@ app.post('/acc', (req, res) => {
         case "turnon": {
             let itemIndex = ListAccount.findIndex(acc => acc.id === idAccount)
             ListAccount[itemIndex].status = true;
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {
@@ -164,7 +171,17 @@ app.post('/acc', (req, res) => {
                     item.role = "slave"
                 }
             })
-            fs.writeFile("account.json", JSON.stringify(ListAccount), (data, err) => {
+            fs.writeFile("./configfolder/account.json", JSON.stringify(ListAccount), (data, err) => {
+                if (err) {
+                    res.send({ action, status: 404, ListAccount })
+                } else {
+                    res.send({ action, status: 200, ListAccount })
+                }
+            })
+        } break;
+        case "restartserver": {
+            let stringtofush = 'RESTART:' + (new Date()).getTime()
+            fs.writeFile("./configfolder/restart.json", stringtofush, (data, err) => {
                 if (err) {
                     res.send({ action, status: 404, ListAccount })
                 } else {

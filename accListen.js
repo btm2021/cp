@@ -3,7 +3,7 @@ const Binance = require('node-binance-api');
 const delay = require('delay');
 var delayTime = 10 * 1000;
 const pnlDB = require('cakebase')('./pnlDB.json')
-const ListAccount = require('./account.json')
+const ListAccount = require('./configfolder/account.json')
 var accListen = []
 main();
 function main() {

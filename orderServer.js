@@ -24,7 +24,7 @@ tool bcs
 */
 
 console.log("WSListen running...")
-ListAccount = require('./account.json')
+ListAccount = require('./configfolder/account.json')
 var accMaster;
 var wsMaster;
 var accSlave = [];
@@ -122,8 +122,6 @@ function event_ORDER_TRADE_UPDATE(data) {
             if (data.order.executionType === "NEW") {
                 makeSLOrder(data)
             }
-
-
         }
         //thanh lý bằng giá market 
         if (data.order.orderStatus === "NEW" && data.order.orderType === "MARKET") {
@@ -148,7 +146,7 @@ function changeLeverage(symbol, leverage) {
     accSlave.map(acc => {
         listPromise.push(oneChangeLeverage(symbol, leverage, acc));
         Promise.all([listPromise]).then(data => {
-            console.log(data)
+
         })
     })
 }
@@ -157,7 +155,6 @@ async function oneChangeLeverage(symbol, leverage, acc) {
     return new Promise((resolve, reject) => {
         acc.binance.futuresLeverage(symbol, leverage).then(data => {
             console.log(`[Đòn bẩy]- Thay đổi đòn bẩy trên acc ${acc.name} + ${symbol} + X${leverage}  *SUCCESS`)
-
         }).catch(err => {
             console.log(`[Đòn bẩy]- Thay đổi đòn bẩy trên acc ${acc.name} + ${symbol} + X${leverage}  *FAIL`)
 
