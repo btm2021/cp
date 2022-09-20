@@ -5,7 +5,9 @@
         "role": "slave",
         "status": false,
         "apikey": "a2b963jVIsIUBo3TvtNkVUYmbG3h858DHmn25lLxVmVnTHSDRrBHru8zILc9b52E",
-        "apisec": "WPMwQJ2ULF9FoRIs30yF08oUgXXSUQh8q39nAxk6JITeRAd4HT70IEoFh0MO8cSz"
+        "apisec": "WPMwQJ2ULF9FoRIs30yF08oUgXXSUQh8q39nAxk6JITeRAd4HT70IEoFh0MO8cSz",
+        "notiuid":"",
+        "noticode":123
     },
     {
         "name": "kien2",
@@ -13,7 +15,9 @@
         "id": "kien2",
         "status": false,
         "apikey": "fGECAol3gse0gjrxMbFhpbm3eAnp2iydXBb8tpXwrE7a3nmNAiy5RZGfOMwq0jX3",
-        "apisec": "mhnzbyqFCeDZgGm28NgeBu5jTri8uqKmrvCgNIeRDhrqS7s1f6sJuw6iW8qItDVt"
+        "apisec": "mhnzbyqFCeDZgGm28NgeBu5jTri8uqKmrvCgNIeRDhrqS7s1f6sJuw6iW8qItDVt",
+        "notiuid":"",
+        "noticode":123
     },
     {
         "name": "bao1",
@@ -21,7 +25,9 @@
         "id": "bao1",
         "status": true,
         "apikey": "4canmP22tqb4anwo2bmR32w3gytt5bKv4bpEA2SRcbnFps8y08HqTZaTBptfyUme",
-        "apisec": "UxSbPIbH6Zki9jklzMQcu59ObbiTqAM1QyP1gsSOv3YLdfoGsHh7yMae8qxlI3Zs"
+        "apisec": "UxSbPIbH6Zki9jklzMQcu59ObbiTqAM1QyP1gsSOv3YLdfoGsHh7yMae8qxlI3Zs",
+        "notiuid":"baotm",
+        "noticode":726624
     },
     {
         "name": "bao3",
@@ -29,6 +35,8 @@
         "id": "bao3",
         "status": false,
         "apikey": "gW9gLxUyLN4cobhJmx2hUDixNKKWWB7REuNS7kNvcyt39L1dPmqdVFlHd9C2wezs",
-        "apisec": "59Qyoe0dYS5gwcLcxlYX5fJXVjzPBJFYBk6FcyP7VXb5UzjE45T05qjOdu5CtQXh"
+        "apisec": "59Qyoe0dYS5gwcLcxlYX5fJXVjzPBJFYBk6FcyP7VXb5UzjE45T05qjOdu5CtQXh",
+        "notiuid":"",
+        "noticode":123
     }
 ]

@@ -31,6 +31,17 @@ _sock.on("message", (topic, message) => {
                 console.log(message)
             })
         } break;
+        case "thanhlyvithe": {
+            let { orderId, symbol,account } = body;
+            let acc = listFullAccount.find(i => i.name === account);
+            acc.binance.futuresCancel(symbol, { orderId: orderId }).then(data => {
+                let _message = `[ORDER]- Hủy Order ${symbol}:${acc.name}:${new Date().getTime()} *SUCCESS`
+                console.log(_message)
+            }).catch(err => {
+                let _message = `[ORDER]- Hủy Order ${symbol}:${acc.name}:${new Date().getTime()} *FAIL`
+                console.log(message)
+            })
+        } break;
     }
 })
 

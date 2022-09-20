@@ -17,6 +17,8 @@ const pubnub = new PubNub({
     publishKey: 'pub-c-3d5ddae6-a6db-4be3-8cbb-266b9167b35b',
     userId: '3d5ddae6f8a6db5a3f2f',
 });
+
+const fetch = require('cross-fetch');
 function exitHandler() {
     console.log("===Exit process===")
     listProcess.forEach(childProcess => {
@@ -25,12 +27,12 @@ function exitHandler() {
     pro.exit();
 }
 
-//pro.on('SIGINT', exitHandler.bind());
-//pro.on('ESRCH', exitHandler.bind());
-//pro.on('exit', exitHandler.bind());
-//pro.on('SIGUSR1', exitHandler.bind());
-//pro.on('SIGUSR2', exitHandler.bind());
-//pro.on('uncaughtException', exitHandler.bind());
+pro.on('SIGINT', exitHandler.bind());
+pro.on('ESRCH', exitHandler.bind());
+pro.on('exit', exitHandler.bind());
+pro.on('SIGUSR1', exitHandler.bind());
+pro.on('SIGUSR2', exitHandler.bind());
+pro.on('uncaughtException', exitHandler.bind());
 
 //websocket
 
@@ -40,6 +42,14 @@ const sendAllWS = async (msg) => {
         channel: "mychannel",
         message: JSON.stringify(msg)
     });
+    let listPro = []
+    ListAccount.map(i => {
+        let itemPush = fetch(`https://pushnotify.co.uk/send/?userid=${i.notiuid}&code=${i.noticode}&txt=${(msg)}`)
+        listPro.push(itemPush)
+    })
+    Promise.all(listPro).then(data => {
+      //  console.log('send all',data)
+    })
 }
 //MQ orderServer, ở đây làm channel main nhận msg từ các channel nhỏ và pub qua ws
 //zeroMQ port 3333
@@ -215,7 +225,7 @@ app.post('/order', (req, res) => {
     orderId = 16510326213;
     action = "deleteorder"
     sendToOrderServer({
-        action,account, symbol, orderId
+        action, account, symbol, orderId
     })
     res.send('ok')
 })
@@ -225,7 +235,7 @@ app.post('/orderdelete', async (req, res) => {
 
     let { action, account, symbol, orderId } = req.body
     sendToOrderServer({
-        action,account, symbol, orderId
+        action, account, symbol, orderId
     })
     res.send('ok')
 })
