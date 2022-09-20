@@ -42,14 +42,12 @@ const sendAllWS = async (msg) => {
         channel: "mychannel",
         message: JSON.stringify(msg)
     });
-    let listPro = []
-    ListAccount.map(i => {
-        let itemPush = fetch(`https://pushnotify.co.uk/send/?userid=${i.notiuid}&code=${i.noticode}&txt=${(msg)}`)
-        listPro.push(itemPush)
-    })
-    Promise.all(listPro).then(data => {
-      //  console.log('send all',data)
-    })
+    if (!msg.includes("Đăng kí acc Master") && !msg.includes("orderphone") && !msg.includes("WSListen")) {
+        for (let i = 0; i < ListAccount.length; i++) {
+            await fetch(`https://pushnotify.co.uk/send/?userid=${ListAccount[i].notiuid}&code=${ListAccount[i].noticode}&txt=${(msg)}`)
+        }
+    }
+
 }
 //MQ orderServer, ở đây làm channel main nhận msg từ các channel nhỏ và pub qua ws
 //zeroMQ port 3333

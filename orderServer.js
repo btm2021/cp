@@ -8,6 +8,7 @@ const { WebsocketClient } = require('binance');
 const Binance = require('node-binance-api');
 console.log = (msg) => {
     sock.send(["msg", JSON.stringify(msg)])
+    
 }
 
 //lắng nghe từ client 
