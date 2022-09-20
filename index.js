@@ -25,16 +25,14 @@ function exitHandler() {
     pro.exit();
 }
 
-pro.on('SIGINT', exitHandler.bind());
-pro.on('ESRCH', exitHandler.bind());
-pro.on('exit', exitHandler.bind());
-pro.on('SIGUSR1', exitHandler.bind());
-pro.on('SIGUSR2', exitHandler.bind());
-pro.on('uncaughtException', exitHandler.bind());
-
+//pro.on('SIGINT', exitHandler.bind());
+//pro.on('ESRCH', exitHandler.bind());
+//pro.on('exit', exitHandler.bind());
+//pro.on('SIGUSR1', exitHandler.bind());
+//pro.on('SIGUSR2', exitHandler.bind());
+//pro.on('uncaughtException', exitHandler.bind());
 
 //websocket
-var listClientWS = [];
 
 const sendAllWS = async (msg) => {
     console.log(msg)
@@ -45,12 +43,14 @@ const sendAllWS = async (msg) => {
 }
 //MQ orderServer, ở đây làm channel main nhận msg từ các channel nhỏ và pub qua ws
 //zeroMQ port 3333
-var zmq = require('zeromq')
-    , sock = zmq.socket('sub');
+var zmq = require('zeromq');
+var sock = zmq.socket('sub');
+var pub = zmq.socket('pub')
 
 sock.connect('tcp://127.0.0.1:8080');
 sock.subscribe('msg');
 console.log('Subscriber connected to port 8888');
+pub.connect('tcp://127.0.0.1:8081')
 
 sock.on('message', async (topic, message) => {
     let msg = message.toString("utf8")
@@ -207,20 +207,27 @@ app.post('/infoAccount', async (req, res) => {
     }
 })
 // order
-app.post('/order', async (req, res) => {
-    sendToOrderServer({ action: "add" })
+app.post('/order', (req, res) => {
+    //  {account: 'bao1', symbol: 'EOSUSDT', orderId: 16510326213}
+    let { action, account, symbol, orderId } = req.body
+    account = 'bao1';
+    symbol = 'EOSUSDT';
+    orderId = 16510326213;
+    action = "deleteorder"
+    sendToOrderServer({
+        action,account, symbol, orderId
+    })
     res.send('ok')
 })
-app.post('/orderhuy', async (req, res) => {
-    let { symbol, orderId, account } = req.body;
-    let acc = listBinanceSlave.find(acc => acc.name === account);
-    cancelOrder(symbol, orderId, acc).then(data => {
-        if (data) {
-            res.send({ status: true, data })
-        } else {
-            res.send({ status: false, data })
-        }
+app.post('/orderdelete', async (req, res) => {
+    //{account: 'bao1', symbol: 'EOSUSDT', orderId: 16510326213}
+    // gửi đến orderserver
+
+    let { action, account, symbol, orderId } = req.body
+    sendToOrderServer({
+        action,account, symbol, orderId
     })
+    res.send('ok')
 })
 app.post('/orderthanhly', async (req, res) => {
     let { symbol, quantity, orderSide, account } = req.body;
@@ -240,7 +247,7 @@ app.listen(PORT, err => {
     startModule()
 });
 const sendToOrderServer = (param) => {
-    orderClient.send(['order', JSON.stringify(param)])
+    pub.send(['order', JSON.stringify(param)])
 }
 
 

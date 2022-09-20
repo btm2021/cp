@@ -9,9 +9,30 @@ const Binance = require('node-binance-api');
 console.log = (msg) => {
     sock.send(["msg", JSON.stringify(msg)])
 }
-// sock.on('message', (topic, message) => {
-//     let body = JSON.parse(message.toString("utf8"))
-// });
+
+//lắng nghe từ client 
+
+
+var _sock = zmq.socket('sub');
+_sock.bindSync('tcp://127.0.0.1:8081');
+_sock.subscribe('order');
+_sock.on("message", (topic, message) => {
+    let body = JSON.parse(message.toString("utf8"))
+    let { action } = body;
+    switch (action) {
+        case "deleteorder": {
+            let { orderId, symbol,account } = body;
+            let acc = listFullAccount.find(i => i.name === account);
+            acc.binance.futuresCancel(symbol, { orderId: orderId }).then(data => {
+                let _message = `[ORDER]- Hủy Order ${symbol}:${acc.name}:${new Date().getTime()} *SUCCESS`
+                console.log(_message)
+            }).catch(err => {
+                let _message = `[ORDER]- Hủy Order ${symbol}:${acc.name}:${new Date().getTime()} *FAIL`
+                console.log(message)
+            })
+        } break;
+    }
+})
 
 /*
 - xong. refactor các function thành promise
@@ -28,9 +49,23 @@ ListAccount = require('./configfolder/account.json')
 var accMaster;
 var wsMaster;
 var accSlave = [];
+var listFullAccount = []
 function main() {
     //make acc
     ListAccount.map(acc => {
+        if (acc.status) {
+            listFullAccount.push({
+                binance:
+                    new Binance().options({
+                        APIKEY: acc.apikey,
+                        APISECRET: acc.apisec,
+                        useServerTime: true,
+                        recvWindow: 60000,
+                        verbose: true,
+                    }),
+                name: acc.name
+            })
+        }
         if (acc.role === "slave" && acc.status === true) {
             console.log(`Đăng kí acc slave ${acc.name}`)
             accSlave.push(
@@ -46,6 +81,7 @@ function main() {
                     name: acc.name
                 }
             )
+
         }
         if (acc.role === "master" && acc.status === true) {
             console.log(`Đăng kí acc Master ${acc.name}`)
@@ -331,7 +367,6 @@ async function oneMakeCANCELOrder(symbol, price, quantity, acc) {
                 let _orderSymbol = data.symbol;
                 let _orderID = data.orderId
                 acc.binance.futuresCancel(_orderSymbol, { orderId: _orderID }).then(data => {
-
                     let message = `[ORDER]- Hủy Order ${symbol}:${price}:${quantity}:${acc.name}:${new Date().getTime()} *SUCCESS`
                     console.log(message)
                     resolve('huy thanh cong')
